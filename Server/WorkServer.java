@@ -7,9 +7,8 @@ public class WorkServer{
 			ArrayList<ClientConnection> sessions = new ArrayList<ClientConnection>();
 			ServerSocket servSocket = new ServerSocket(3308);
 			int currentSessionCount = 0;
-			for(;;){
+			for(;;currentSessionCount++){
 				Socket currSocket = servSocket.accept();
-				currentSessionCount++;
 				new ClientConnection(currSocket, currentSessionCount).start();
 			}
 		catch(Exception e){
