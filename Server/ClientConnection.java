@@ -1,5 +1,6 @@
+import java.net.*;
 public class ClientConnection extends Thread{
-	public ClientConnection(){
+	public ClientConnection(Socket clientSocket, int connectionNumber){
 
 	}
 
