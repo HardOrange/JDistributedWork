@@ -7,6 +7,10 @@ public class WorkClient{
 	public WorkClient(String address, int port){
 		try{
 			connection = new Socket(address, port);
+
+			System.out.println("This is where the magic happens.");
+
+			connection.close();
 		}catch(Exception e){
 
 		}
