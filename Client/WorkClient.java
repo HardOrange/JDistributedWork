@@ -8,7 +8,7 @@ public class WorkClient{
 		try{
 			connection = new Socket(address, port);
 		}catch(Exception e){
-			
+
 		}
 	}
 	public static void main(String[] args){
