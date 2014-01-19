@@ -9,7 +9,9 @@ public class WorkServer{
 			int currentSessionCount = 0;
 			for(;;currentSessionCount++){
 				Socket currSocket = servSocket.accept();
-				new ClientConnection(currSocket, currentSessionCount).start();
+				ClientConnection currConn = new ClientConnection(currSocket, currentSessionCount);
+				currConn.start();
+				sessions.add(currConn);
 			}
 		catch(Exception e){
 			e.printStackTrace();
