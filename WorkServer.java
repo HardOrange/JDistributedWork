@@ -16,7 +16,7 @@ public class WorkServer{
 		new WorkServerCronThread(this).start();
 		try{
 			for(int workNum=0; workNum<1000; workNum++){
-				WorkQueue.add(new Work((Runnable) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum))));
+				WorkQueue.add(new Work((Thread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum))));
 			}
 		}catch(Exception e){
 			e.printStackTrace();
