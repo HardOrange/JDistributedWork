@@ -23,6 +23,14 @@ public class WorkServer{
 			e.printStackTrace();
 		}
 	}
+	public synchronized Work getWork(){
+		for(Work piece: WorkQueue){
+			if(piece.getStatus()==0){
+				return piece;
+			}
+		}
+		return null;
+	}
 
 	public void newConnection(ClientConnection currConn){
 		Sessions.add(currConn);
