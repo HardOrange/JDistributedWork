@@ -39,6 +39,7 @@ class WorkServerConnectionThread extends Thread{
 					ClientConnection currConn = new ClientConnection(currSocket, currentSessionCount);
 					Superior.newConnection(currConn);
 					currConn.start();
+					System.out.println("HEY! I CONNECTED!");
 				}
 				catch(Exception e){
 					//e.printStackTrace();
