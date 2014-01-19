@@ -38,12 +38,8 @@ public class WorkServer{
 			LOG.info("LOG INITALIZED"); 
 		} catch (Exception e) {}
 		
-		new WorkServer(args);
-		
-		
-	
+		new WorkServer(args);	
 	}
-
 }
 
 

@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+
 public class WorkClient{
 	private Socket connection;
 	private ObjectInputStream OIS;
