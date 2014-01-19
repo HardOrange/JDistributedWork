@@ -1,6 +1,7 @@
 import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.*;
+import java.io.*;
 
 public class WorkServer{
 	
@@ -65,14 +66,16 @@ class WorkServerConnectionThread extends Thread{
 					Superior.newConnection(currConn);
 					currConn.start();
 					Superior.LOG.info("New WorkClient Connected");
+				}catch(SocketTimeoutException e){
+
 				}
 				catch(Exception e){
-					//e.printStackTrace();
+					e.printStackTrace();
 				}
 			}
 			servSocket.close();
 		}catch(Exception e){
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 
 	}
@@ -104,7 +107,8 @@ class WorkServerCronThread extends Thread {
 		while (CleanConnections) { //needs condition
 			ArrayList<ClientConnection> conns = Superior.getList();
 			for (ClientConnection curr : conns) {
-				if (curr.getSocket().isClosed()) {
+				if (curr.isDead()) {
+					curr.terminateConnection();
 					Superior.removeConnection(curr);
 					Superior.LOG.info("removing connection");
 				}
