@@ -14,6 +14,7 @@ public class WorkServer{
 		Sessions = new ArrayList<ClientConnection>();
 		new WorkServerConnectionThread(this).start();
 		new WorkServerCronThread(this).start();
+		WorkQueue = new ArrayList<Work>();
 		try{
 			for(int workNum=0; workNum<1000; workNum++){
 				WorkQueue.add(new Work((Thread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum))));
