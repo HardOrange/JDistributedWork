@@ -20,9 +20,11 @@ public class WorkClient{
 		}
 	}
 	public void terminateConnection(){
+		try{
 			OIS.close();
 			OOS.close();
 			connection.close();
+		}catch(Exception e){}
 	}
 	public static void main(String[] args){
 		new WorkClient(args[0], Integer.parseInt(args[1]));

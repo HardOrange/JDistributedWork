@@ -9,11 +9,18 @@ public class WorkServer{
 	
 	private static FileHandler fh;
 	private ArrayList<ClientConnection> Sessions; //ArrayList Containing all the Active Client Connections
-	
+	private ArrayList<Work> WorkQueue;
 	public WorkServer(String[] args){
 		Sessions = new ArrayList<ClientConnection>();
 		new WorkServerConnectionThread(this).start();
 		new WorkServerCronThread(this).start();
+		try{
+			for(int workNum=0; workNum<1000; workNum++){
+				WorkQueue.add(new Work((Runnable) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum))));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public void newConnection(ClientConnection currConn){
