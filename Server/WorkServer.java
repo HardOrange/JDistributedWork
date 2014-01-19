@@ -12,6 +12,7 @@ public class WorkServer{
 	public WorkServer(String[] args){
 		Sessions = new ArrayList<ClientConnection>();
 		new WorkServerConnectionThread(this).start();
+		new WorkServerCronThread(this).start();
 	}
 
 	public void newConnection(ClientConnection currConn){
@@ -20,7 +21,7 @@ public class WorkServer{
 	public void removeConnection(ClientConnection currConn){
 		Sessions.remove(currConn);
 	}
-	
+	@SuppressWarnings("unchecked")
 	public ArrayList<ClientConnection> getList() {
 		return (ArrayList<ClientConnection>) Sessions.clone();
 	}
@@ -46,7 +47,7 @@ public class WorkServer{
 
 
 class WorkServerConnectionThread extends Thread{
-	private boolean stillAcceptingConnections=true;
+	private boolean StillAcceptingConnections=true;
 	private WorkServer Superior;
 	public WorkServerConnectionThread(WorkServer superior){
 		Superior = superior;
@@ -56,7 +57,7 @@ class WorkServerConnectionThread extends Thread{
 			ServerSocket servSocket = new ServerSocket(3308);
 			int currentSessionCount = 0;
 			servSocket.setSoTimeout(200);
-			while(stillAcceptingConnections){
+			while(StillAcceptingConnections){
 				try{
 					Socket currSocket = servSocket.accept();
 					currentSessionCount++;
@@ -75,12 +76,17 @@ class WorkServerConnectionThread extends Thread{
 		}
 
 	}
+	public void setAcceptingConnections(boolean setter){
+		StillAcceptingConnections=setter;
+		Superior.LOG.info("Changed CleanConnections to "+StillAcceptingConnections);
+	}
 
 }
 
 class WorkServerCronThread extends Thread {
 	private WorkServer Superior;
 	private int Timeout;
+	private boolean CleanConnections=true;
 
 	public WorkServerCronThread(WorkServer superior) {
 		Superior = superior;
@@ -95,7 +101,7 @@ class WorkServerCronThread extends Thread {
 
 	public void run() {
 
-		while (true) { //needs condition
+		while (CleanConnections) { //needs condition
 			ArrayList<ClientConnection> conns = Superior.getList();
 			for (ClientConnection curr : conns) {
 				if (curr.getSocket().isClosed()) {
@@ -105,5 +111,10 @@ class WorkServerCronThread extends Thread {
 
 			}
 		}
+	}
+
+	public void setCleanConnections(boolean setter){
+		CleanConnections=setter;
+		Superior.LOG.info("Changed CleanConnections to "+CleanConnections);
 	}
 }
