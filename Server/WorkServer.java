@@ -90,7 +90,7 @@ class WorkServerCronThread extends Thread {
 
 	public WorkServerCronThread(WorkServer superior) {
 		Superior = superior;
-		Timeout = 500;
+		Timeout = 2000;
 	}
 
 	public WorkServerCronThread(WorkServer superior, int time) {
@@ -108,6 +108,11 @@ class WorkServerCronThread extends Thread {
 					Superior.removeConnection(curr);
 					Superior.LOG.info("removing connection");
 				}
+
+			}
+			try{
+				this.sleep(Timeout);
+			}catch(Exception e){
 
 			}
 		}
