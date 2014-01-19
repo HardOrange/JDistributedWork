@@ -1,5 +1,5 @@
 public class Work{
-	public Work(String[] args, Runnable target){
+	public Work(Runnable target){
 
 	}
 }
