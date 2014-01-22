@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 import java.io.*;
 
-public class WorkServer{
+public class WorkServer implements Serializable{
 
 	public final static Logger LOG = Logger.getLogger(WorkServer.class.getName());
 

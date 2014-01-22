@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-public class WorkClient{
+public class WorkClient implements Serializable{
 	private Socket connection;
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;

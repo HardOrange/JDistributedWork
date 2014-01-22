@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-public class ClientConnection extends Thread{
+public class ClientConnection extends Thread implements Serializable{
 	private Socket ClientSocket;
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;
