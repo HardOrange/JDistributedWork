@@ -80,7 +80,7 @@ class WorkServerConnectionThread extends Thread{
 				try{
 					Socket currSocket = servSocket.accept();
 					currentSessionCount++;
-					ClientConnection currConn = new ClientConnection(currSocket, currentSessionCount);
+					ClientConnection currConn = new ClientConnection(currSocket, currentSessionCount, Superior);
 					Superior.newConnection(currConn);
 					currConn.start();
 					Superior.LOG.info("New WorkClient Connected");
