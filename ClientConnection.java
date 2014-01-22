@@ -17,12 +17,12 @@ public class ClientConnection extends Thread implements Serializable{
 			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
 			MaxWorkLoad = Integer.parseInt((String)OIS.readObject());
 			for(; CurrentWorkLoad < MaxWorkLoad; CurrentWorkLoad++){
-				OOS.writeObject(HomeServer.getWork(this));
+				OOS.writeObject(HomeServer.getWork());
 			}
-			ReportThread lastWorkReceived = HomeServer.getWork(this);
+			ReportThread lastWorkReceived = HomeServer.getWork();
 			while(lastWorkReceived!=null){
 				HomeServer.reportThread((ReportThread)OIS.readObject());
-				lastWorkReceived = HomeServer.getWork(this);
+				lastWorkReceived = HomeServer.getWork();
 				OOS.writeObject(lastWorkReceived);
 			}
 

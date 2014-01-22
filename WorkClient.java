@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.util.*;
 
 public class WorkClient implements Serializable{
 	private Socket connection;
@@ -7,7 +8,7 @@ public class WorkClient implements Serializable{
 	private ObjectOutputStream OOS;
 	private Integer	CurrentWorkLoad = 0;
 	private Integer MaxWorkLoad;
-
+	private ArrayList<ReportThread> WorkLine;
 
 	public WorkClient(){
 
@@ -15,6 +16,7 @@ public class WorkClient implements Serializable{
 	public WorkClient(String address, int port){
 		try{
 			connection = new Socket(address, port);
+			WorkLine = new ArrayList<ReportThread>();
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
 			MaxWorkLoad = Runtime.getRuntime().availableProcessors();
@@ -22,10 +24,18 @@ public class WorkClient implements Serializable{
 			ReportThread lastThreadReceived = (ReportThread) OIS.readObject();
 			while(lastThreadReceived!=null){
 				while(CurrentWorkLoad<MaxWorkLoad){
-					lastThreadReceived.setWorkClient(this);
+					WorkLine.add(lastThreadReceived);
+					//lastThreadReceived.setWorkClient(this);
 					lastThreadReceived.start();
 					CurrentWorkLoad++;
 					lastThreadReceived = (ReportThread) OIS.readObject();
+				}
+				for(ReportThread work: WorkLine){
+					if(work.getStatus()==2){
+						uploadData(work);
+						WorkLine.remove(work);
+						break;
+					}
 				}
 			}
 			while(CurrentWorkLoad>0){
