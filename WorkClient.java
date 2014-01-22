@@ -27,7 +27,15 @@ public class WorkClient{
 			OOS.close();
 			connection.close();
 		}catch(Exception e){
-			
+
+		}
+	}
+
+	public synchronized void uploadData(ReportThread reportThread){
+		try{
+			OOS.writeObject(reportThread);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 

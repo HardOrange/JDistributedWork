@@ -4,6 +4,7 @@ public abstract class ReportThread extends Thread implements Serializable{
 	int Status;
 	String Result;
 	int SliceNum;
+	WorkClient Worker;
 
 	int getStatus(){
 		return Status;
@@ -19,6 +20,15 @@ public abstract class ReportThread extends Thread implements Serializable{
 
 	final int getSliceNum(){
 		return SliceNum;
+	}
+
+	final void setWorkClient(WorkClient worker){
+		Worker = worker;
+	}
+
+	final void uploadResults(){
+		setStatus(2);
+		Worker.uploadData(this);
 	}
 
 
