@@ -5,11 +5,13 @@ public class ClientConnection extends Thread{
 	private Socket ClientSocket;
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;
+	private Integer WorkLimit;
 	public ClientConnection(Socket clientSocket, int connectionNumber){
 		ClientSocket = clientSocket;
 		try{
 			OIS = new ObjectInputStream(ClientSocket.getInputStream());
 			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
+			WorkLimit = Integer.parseInt((String)OIS.readObject());
 		}catch(Exception e){
 			e.printStackTrace();
 		}

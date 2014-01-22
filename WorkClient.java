@@ -13,7 +13,7 @@ public class WorkClient{
 			connection = new Socket(address, port);
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
-			System.out.println("This is where the magic happens.");
+			OOS.writeObject(Integer.toString(Runtime.getRuntime().availableProcessors()));
 			terminateConnection();
 		}catch(Exception e){
 			e.printStackTrace();
