@@ -17,15 +17,15 @@ public class WorkClient{
 			connection = new Socket(address, port);
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
-			MaxWorkLoad = Runtime.getRuntime().availableProcessors()
+			MaxWorkLoad = Runtime.getRuntime().availableProcessors();
 			OOS.writeObject(Integer.toString(MaxWorkLoad));
 			ReportThread lastThreadReceived = (ReportThread) OIS.readObject();
-			while(lastThreadRecieved!=null){
-				while(CurrentWorkload<MaxWorkLoad){
-					lastThreadRecieved.setWorkClient(this);
-					lastThreadRecieved.start();
-					CurrentWorkload++;
-					lastThreadRecieved = OIS.readObject();
+			while(lastThreadReceived!=null){
+				while(CurrentWorkLoad<MaxWorkLoad){
+					lastThreadReceived.setWorkClient(this);
+					lastThreadReceived.start();
+					CurrentWorkLoad++;
+					lastThreadReceived = (ReportThread) OIS.readObject();
 				}
 			}
 			while(CurrentWorkLoad>0){
@@ -50,7 +50,7 @@ public class WorkClient{
 	public synchronized void uploadData(ReportThread reportThread){
 		try{
 			OOS.writeObject(reportThread);
-			CurrentWorkload--;
+			CurrentWorkLoad--;
 		}catch(Exception e){
 			e.printStackTrace();
 		}
