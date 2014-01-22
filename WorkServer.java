@@ -4,9 +4,9 @@ import java.util.logging.*;
 import java.io.*;
 
 public class WorkServer{
-	
+
 	public final static Logger LOG = Logger.getLogger(WorkServer.class.getName());
-	
+
 	private static FileHandler fh;
 	private ArrayList<ClientConnection> Sessions; //ArrayList Containing all the Active Client Connections
 	private ArrayList<Work> WorkQueue;
@@ -20,7 +20,7 @@ public class WorkServer{
 				WorkQueue.add(new Work((Thread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum))));
 			}
 		}catch(Exception e){
-			LOG.warning(e.getStackTrace());
+			LOG.severe(e.toString());
 		}
 	}
 	public synchronized Work getWork(){
@@ -44,19 +44,19 @@ public class WorkServer{
 	}
 
 	public static void main(String[] args){
-		
+
 		try {
 			LOG.setLevel(Level.ALL);
-			fh = new FileHandler("WorkServer.log");  
+			fh = new FileHandler("WorkServer.log");
 			LOG.addHandler(fh);
-			SimpleFormatter formatter = new SimpleFormatter();  
-			fh.setFormatter(formatter);  
-			LOG.info("LOG INITALIZED"); 
+			SimpleFormatter formatter = new SimpleFormatter();
+			fh.setFormatter(formatter);
+			LOG.info("LOG INITALIZED");
 		} catch (Exception e) {
-			LOG.warning(e.getStackTrace());
+			LOG.severe(e.toString());
 		}
-		
-		new WorkServer(args);	
+
+		new WorkServer(args);
 	}
 }
 
@@ -81,15 +81,15 @@ class WorkServerConnectionThread extends Thread{
 					currConn.start();
 					Superior.LOG.info("New WorkClient Connected");
 				}catch(SocketTimeoutException e){
-					Superior.LOG.warning(e.getStackTrace());
+					Superior.LOG.severe(e.toString());
 				}
 				catch(Exception e){
-					Superior.LOG.warning(e.getStackTrace());
+					Superior.LOG.severe(e.toString());
 				}
 			}
 			servSocket.close();
 		}catch(Exception e){
-			Superior.LOG.warning(e.getStackTrace());
+			Superior.LOG.severe(e.toString());
 		}
 
 	}
@@ -131,7 +131,7 @@ class WorkServerCronThread extends Thread {
 			try{
 				this.sleep(Timeout);
 			}catch(Exception e){
-				Superior.LOG.warning(e.getStackTrace());
+				Superior.LOG.severe(e.toString());
 			}
 		}
 	}
