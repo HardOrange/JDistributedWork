@@ -81,7 +81,7 @@ class WorkServerConnectionThread extends Thread{
 					currConn.start();
 					Superior.LOG.info("New WorkClient Connected");
 				}catch(SocketTimeoutException e){
-					Superior.LOG.severe(e.toString());
+					//Superior.LOG.severe(e.toString());
 				}
 				catch(Exception e){
 					Superior.LOG.severe(e.toString());
