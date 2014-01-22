@@ -6,6 +6,7 @@ public class ClientConnection extends Thread{
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;
 	private Integer WorkLimit;
+
 	public ClientConnection(Socket clientSocket, int connectionNumber){
 		ClientSocket = clientSocket;
 		try{
@@ -30,6 +31,7 @@ public class ClientConnection extends Thread{
 			return true;
 		}
 	}
+	
 	public void terminateConnection(){
 		try{
 			OIS.close();

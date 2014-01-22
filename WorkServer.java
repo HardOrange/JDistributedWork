@@ -35,9 +35,11 @@ public class WorkServer{
 	public void newConnection(ClientConnection currConn){
 		Sessions.add(currConn);
 	}
+
 	public void removeConnection(ClientConnection currConn){
 		Sessions.remove(currConn);
 	}
+
 	@SuppressWarnings("unchecked")
 	public ArrayList<ClientConnection> getList() {
 		return (ArrayList<ClientConnection>) Sessions.clone();
@@ -64,9 +66,11 @@ public class WorkServer{
 class WorkServerConnectionThread extends Thread{
 	private boolean StillAcceptingConnections=true;
 	private WorkServer Superior;
+
 	public WorkServerConnectionThread(WorkServer superior){
 		Superior = superior;
 	}
+
 	public void run(){
 		try{
 			ServerSocket servSocket = new ServerSocket(3308);
@@ -93,6 +97,7 @@ class WorkServerConnectionThread extends Thread{
 		}
 
 	}
+
 	public void setAcceptingConnections(boolean setter){
 		StillAcceptingConnections=setter;
 		Superior.LOG.info("Changed CleanConnections to "+StillAcceptingConnections);
@@ -114,7 +119,6 @@ class WorkServerCronThread extends Thread {
 		Superior = superior;
 		Timeout = time;
 	}
-
 
 	public void run() {
 
