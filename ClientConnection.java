@@ -6,7 +6,7 @@ public class ClientConnection extends Thread{
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;
 	private Integer WorkLimit;
-	private WorkServer HomeServer
+	private WorkServer HomeServer;
 
 	public ClientConnection(Socket clientSocket, int connectionNumber, WorkServer workServer){
 		HomeServer = workServer;

@@ -9,22 +9,22 @@ public class WorkServer{
 
 	private static FileHandler fh;
 	private ArrayList<ClientConnection> Sessions; //ArrayList Containing all the Active Client Connections
-	private ArrayList<Work> WorkQueue;
+	private ArrayList<ReportThread> WorkQueue;
 	public WorkServer(String[] args){
 		Sessions = new ArrayList<ClientConnection>();
 		new WorkServerConnectionThread(this).start();
 		new WorkServerCronThread(this).start();
-		WorkQueue = new ArrayList<Work>();
+		WorkQueue = new ArrayList<ReportThread>();
 		try{
 			for(int workNum=0; workNum<1000; workNum++){
-				WorkQueue.add(new Work((Thread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum))));
+				WorkQueue.add((ReportThread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum)));
 			}
 		}catch(Exception e){
 			LOG.severe(e.toString());
 		}
 	}
-	public synchronized Work getWork(){
-		for(Work piece: WorkQueue){
+	public synchronized ReportThread getWork(){
+		for(ReportThread piece: WorkQueue){
 			if(piece.getStatus()==0){
 				return piece;
 			}
