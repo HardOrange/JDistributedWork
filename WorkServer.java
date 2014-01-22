@@ -20,7 +20,7 @@ public class WorkServer{
 				WorkQueue.add(new Work((Thread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum))));
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			LOG.warning(e.getStackTrace());
 		}
 	}
 	public synchronized Work getWork(){
@@ -52,7 +52,9 @@ public class WorkServer{
 			SimpleFormatter formatter = new SimpleFormatter();  
 			fh.setFormatter(formatter);  
 			LOG.info("LOG INITALIZED"); 
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			LOG.warning(e.getStackTrace());
+		}
 		
 		new WorkServer(args);	
 	}
@@ -79,15 +81,15 @@ class WorkServerConnectionThread extends Thread{
 					currConn.start();
 					Superior.LOG.info("New WorkClient Connected");
 				}catch(SocketTimeoutException e){
-
+					Superior.LOG.warning(e.getStackTrace());
 				}
 				catch(Exception e){
-					e.printStackTrace();
+					Superior.LOG.warning(e.getStackTrace());
 				}
 			}
 			servSocket.close();
 		}catch(Exception e){
-			e.printStackTrace();
+			Superior.LOG.warning(e.getStackTrace());
 		}
 
 	}
@@ -129,7 +131,7 @@ class WorkServerCronThread extends Thread {
 			try{
 				this.sleep(Timeout);
 			}catch(Exception e){
-
+				Superior.LOG.warning(e.getStackTrace());
 			}
 		}
 	}
