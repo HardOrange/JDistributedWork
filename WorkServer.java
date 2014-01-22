@@ -23,13 +23,25 @@ public class WorkServer{
 			LOG.severe(e.toString());
 		}
 	}
-	public synchronized ReportThread getWork(){
+	public synchronized ReportThread getWork(ClientConnection client){
 		for(ReportThread piece: WorkQueue){
 			if(piece.getStatus()==0){
+				piece.setStatus(1);
+				piece.setClient(client);
 				return piece;
 			}
 		}
 		return null;
+	}
+
+	public synchronized void reportThread(ReportThread repoThread){
+		int sliceNum = repoThread.getSliceNum();
+		for(ReportThread piece: WorkQueue){
+			if(piece.getSliceNum()==sliceNum){
+				WorkQueue.set(WorkQueue.indexOf(piece),repoThread);
+				break;
+			}
+		}
 	}
 
 	public void newConnection(ClientConnection currConn){

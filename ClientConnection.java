@@ -5,8 +5,9 @@ public class ClientConnection extends Thread{
 	private Socket ClientSocket;
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;
-	private Integer WorkLimit;
 	private WorkServer HomeServer;
+	private Integer CurrentWorkLoad = 0;
+	private Integer MaxWorkLoad;
 
 	public ClientConnection(Socket clientSocket, int connectionNumber, WorkServer workServer){
 		HomeServer = workServer;
@@ -14,7 +15,17 @@ public class ClientConnection extends Thread{
 		try{
 			OIS = new ObjectInputStream(ClientSocket.getInputStream());
 			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
-			WorkLimit = Integer.parseInt((String)OIS.readObject());
+			MaxWorkLoad = Integer.parseInt((String)OIS.readObject());
+			for(; CurrentWorkLoad < MaxWorkLoad; CurrentWorkLoad++){
+				OOS.writeObject(HomeServer.getWork(this));
+			}
+			ReportThread lastWorkReceived = HomeServer.getWork(this);
+			while(lastWorkReceived!=null){
+				HomeServer.reportThread((ReportThread)OIS.readObject());
+				lastWorkReceived = HomeServer.getWork(this);
+				OOS.writeObject(lastWorkReceived);
+			}
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
