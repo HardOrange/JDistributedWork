@@ -14,7 +14,7 @@ public class WorkClient{
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
 			System.out.println("This is where the magic happens.");
-
+			terminateConnection();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

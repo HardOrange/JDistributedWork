@@ -24,7 +24,7 @@ public class ClientConnection extends Thread{
 		try{
 			return ClientSocket.getInputStream().read()==-1;
 		}catch(IOException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			return true;
 		}
 	}
