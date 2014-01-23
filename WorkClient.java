@@ -22,8 +22,8 @@ public class WorkClient implements Serializable{
 			MaxWorkLoad = Runtime.getRuntime().availableProcessors();
 			OOS.writeObject(Integer.toString(MaxWorkLoad));
 			ReportThread lastThreadReceived = (ReportThread) OIS.readObject();
-			while(lastThreadReceived!=null){
-				while(CurrentWorkLoad<MaxWorkLoad){
+			while((lastThreadReceived!=null)||(CurrentWorkLoad>0)){
+				while((CurrentWorkLoad<MaxWorkLoad-1) && (lastThreadReceived!=null)){
 					WorkLine.add(lastThreadReceived);
 					//lastThreadReceived.setWorkClient(this);
 					lastThreadReceived.start();
@@ -33,13 +33,10 @@ public class WorkClient implements Serializable{
 				for(ReportThread work: WorkLine){
 					if(work.getStatus()==2){
 						uploadData(work);
-						WorkLine.remove(work);
+						work.setStatus(3);
 						break;
 					}
 				}
-			}
-			while(CurrentWorkLoad>0){
-				//terrible Implementation
 			}
 			terminateConnection();
 		}catch(Exception e){

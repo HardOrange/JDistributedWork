@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.util.logging.*;
 
 public class ClientConnection extends Thread implements Serializable{
 	private Socket ClientSocket;
@@ -22,10 +23,15 @@ public class ClientConnection extends Thread implements Serializable{
 			ReportThread lastWorkReceived = HomeServer.getWork();
 			while(lastWorkReceived!=null){
 				HomeServer.reportThread((ReportThread)OIS.readObject());
+				CurrentWorkLoad--;
 				lastWorkReceived = HomeServer.getWork();
 				OOS.writeObject(lastWorkReceived);
+				CurrentWorkLoad++;
 			}
-
+			while(CurrentWorkLoad>1){
+				HomeServer.reportThread((ReportThread)OIS.readObject());
+				CurrentWorkLoad--;
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

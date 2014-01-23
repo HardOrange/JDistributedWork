@@ -16,10 +16,9 @@ public class WorkServer implements Serializable{
 		new WorkServerCronThread(this).start();
 		WorkQueue = new ArrayList<ReportThread>();
 		try{
-			for(int workNum=0; workNum<10; workNum++){
+			for(int workNum=0; workNum<6; workNum++){
 				WorkQueue.add((ReportThread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum)));
 			}
-			LOG.info("WorkQueue Created");
 		}catch(Exception e){
 			LOG.severe(e.toString());
 		}
@@ -29,7 +28,6 @@ public class WorkServer implements Serializable{
 		for(ReportThread piece: WorkQueue){
 			if(piece.getStatus()==0){
 				piece.setStatus(1);
-				//piece.setClient(client);
 				return piece;
 			}
 		}
