@@ -42,6 +42,8 @@ public class ClientConnection extends Thread implements Serializable{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		HomeServer.LOG.info("Client Finished Execution");
+		HomeServer.removeConnection(this);
 	}
 
 	public Socket getSocket(){
