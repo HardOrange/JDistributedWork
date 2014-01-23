@@ -39,6 +39,7 @@ public class WorkClient implements Serializable{
 				}
 			}
 			terminateConnection();
+		}catch(ConnectException e){
 		}catch(Exception e){
 			e.printStackTrace();
 		}

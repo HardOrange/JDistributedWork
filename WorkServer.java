@@ -10,10 +10,15 @@ public class WorkServer implements Serializable{
 	private static FileHandler fh;
 	private ArrayList<ClientConnection> Sessions; //ArrayList Containing all the Active Client Connections
 	private ArrayList<ReportThread> WorkQueue;
+	private WorkServerCronThread CronThread;
+	private WorkServerConnectionThread ConnThread;
+
 	public WorkServer(String[] args){
 		Sessions = new ArrayList<ClientConnection>();
-		new WorkServerConnectionThread(this).start();
-		new WorkServerCronThread(this).start();
+		ConnThread = new WorkServerConnectionThread(this);
+		ConnThread.start();
+		CronThread = new WorkServerCronThread(this);
+		CronThread.start();
 		WorkQueue = new ArrayList<ReportThread>();
 		try{
 			for(int workNum=0; workNum<Integer.parseInt(args[1]); workNum++){
@@ -31,7 +36,9 @@ public class WorkServer implements Serializable{
 				return piece;
 			}
 		}
+		ConnThread.setAcceptingConnections(false);
 		return null;
+
 	}
 
 	public synchronized void reportThread(ReportThread repoThread){
@@ -112,7 +119,7 @@ class WorkServerConnectionThread extends Thread{
 
 	public void setAcceptingConnections(boolean setter){
 		StillAcceptingConnections=setter;
-		Superior.LOG.info("Changed CleanConnections to "+StillAcceptingConnections);
+		Superior.LOG.info("Changed AcceptingConnections to "+StillAcceptingConnections);
 	}
 
 }
