@@ -13,6 +13,9 @@ public class ClientConnection extends Thread implements Serializable{
 	public ClientConnection(Socket clientSocket, int connectionNumber, WorkServer workServer){
 		HomeServer = workServer;
 		ClientSocket = clientSocket;
+		}
+
+	public void run(){
 		try{
 			OIS = new ObjectInputStream(ClientSocket.getInputStream());
 			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
@@ -21,8 +24,9 @@ public class ClientConnection extends Thread implements Serializable{
 				OOS.writeObject(HomeServer.getWork());
 			}
 			ReportThread lastWorkReceived = HomeServer.getWork();
-			while(lastWorkReceived!=null){
-				HomeServer.reportThread((ReportThread)OIS.readObject());
+			while(lastWorkReceived instanceof ReportThread){
+				//HomeServer.LOG.info(OIS.readObject().getClass().getName());
+				//HomeServer.reportThread((ReportThread)OIS.readObject());
 				CurrentWorkLoad--;
 				lastWorkReceived = HomeServer.getWork();
 				OOS.writeObject(lastWorkReceived);
@@ -32,24 +36,18 @@ public class ClientConnection extends Thread implements Serializable{
 				HomeServer.reportThread((ReportThread)OIS.readObject());
 				CurrentWorkLoad--;
 			}
+		}catch(SocketException e){
+			HomeServer.removeConnection(this);
+			HomeServer.LOG.info("Client Disconnected and Removed");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-
 	}
 
 	public Socket getSocket(){
 		return ClientSocket;
 	}
 
-	public boolean isDead(){
-		try{
-			return ClientSocket.getInputStream().read()==-1;
-		}catch(IOException e){
-			//e.printStackTrace();
-			return true;
-		}
-	}
 
 	public void terminateConnection(){
 		try{

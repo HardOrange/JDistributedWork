@@ -14,11 +14,6 @@ public class WorkServer implements Serializable{
 	private WorkServerConnectionThread ConnThread;
 
 	public WorkServer(String[] args){
-		Sessions = new ArrayList<ClientConnection>();
-		ConnThread = new WorkServerConnectionThread(this);
-		ConnThread.start();
-		CronThread = new WorkServerCronThread(this);
-		CronThread.start();
 		WorkQueue = new ArrayList<ReportThread>();
 		try{
 			for(int workNum=0; workNum<Integer.parseInt(args[1]); workNum++){
@@ -27,6 +22,13 @@ public class WorkServer implements Serializable{
 		}catch(Exception e){
 			LOG.severe(e.toString());
 		}
+
+		LOG.info("Work Queue Created");
+		Sessions = new ArrayList<ClientConnection>();
+		ConnThread = new WorkServerConnectionThread(this);
+		ConnThread.start();
+		CronThread = new WorkServerCronThread(this);
+		CronThread.start();
 	}
 
 	public synchronized ReportThread getWork(){
@@ -53,6 +55,7 @@ public class WorkServer implements Serializable{
 
 	public void newConnection(ClientConnection currConn){
 		Sessions.add(currConn);
+		LOG.info("New Connection Created");
 	}
 
 	public void removeConnection(ClientConnection currConn){
@@ -98,11 +101,11 @@ class WorkServerConnectionThread extends Thread{
 			while(StillAcceptingConnections){
 				try{
 					Socket currSocket = servSocket.accept();
+					Superior.LOG.info("Connection Negotiating");
 					currentSessionCount++;
 					ClientConnection currConn = new ClientConnection(currSocket, currentSessionCount, Superior);
 					Superior.newConnection(currConn);
 					currConn.start();
-					Superior.LOG.info("New WorkClient Connected");
 				}catch(SocketTimeoutException e){
 					//Superior.LOG.severe(e.toString());
 				}
@@ -144,7 +147,7 @@ class WorkServerCronThread extends Thread {
 		while (CleanConnections) { //needs condition
 			ArrayList<ClientConnection> conns = Superior.getList();
 			for (ClientConnection curr : conns) {
-				if (curr.isDead()) {
+				if (false) {
 					curr.terminateConnection();
 					Superior.removeConnection(curr);
 					Superior.LOG.info("removing connection");
