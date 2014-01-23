@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public abstract class ReportThread extends Thread implements Serializable{
 	int Status;
@@ -25,6 +26,8 @@ public abstract class ReportThread extends Thread implements Serializable{
 	final void uploadResults(){
 		setStatus(2);
 	}
+
+	abstract String processResult(ArrayList<ReportThread> results);
 
 
 }
