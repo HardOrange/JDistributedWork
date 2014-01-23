@@ -16,7 +16,7 @@ public class WorkServer implements Serializable{
 		new WorkServerCronThread(this).start();
 		WorkQueue = new ArrayList<ReportThread>();
 		try{
-			for(int workNum=0; workNum<6; workNum++){
+			for(int workNum=0; workNum<Integer.parseInt(args[1]); workNum++){
 				WorkQueue.add((ReportThread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum)));
 			}
 		}catch(Exception e){
