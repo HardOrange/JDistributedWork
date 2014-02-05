@@ -2,6 +2,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.*;
 import java.io.*;
+import org.apache.commons.io.FileUtils;
 
 public class WorkServer implements Serializable{
 
@@ -12,9 +13,11 @@ public class WorkServer implements Serializable{
 	private ArrayList<ReportThread> WorkQueue;
 	private WorkServerCronThread CronThread;
 	private WorkServerConnectionThread ConnThread;
+	private String FileNameString;
 
 	public WorkServer(String[] args){
 		WorkQueue = new ArrayList<ReportThread>();
+		FileNameString = args[0]+".class";
 		try{
 			for(int workNum=0; workNum<Integer.parseInt(args[1]); workNum++){
 				WorkQueue.add((ReportThread) Class.forName(args[0]).getConstructor(new Class<?>[]{Class.forName("java.lang.Integer")}).newInstance(new Integer(workNum)));
@@ -53,6 +56,14 @@ public class WorkServer implements Serializable{
 		}
 	}
 
+	public synchronized File getClassFile(){
+		return new File(FileNameString);
+	}
+
+	public synchronized String getClassFileName(){
+		return FileNameString;
+	}
+
 	public void newConnection(ClientConnection currConn){
 		Sessions.add(currConn);
 		LOG.info("New Connection Created");
@@ -79,7 +90,7 @@ public class WorkServer implements Serializable{
 		} catch (Exception e) {
 			LOG.severe(e.toString());
 		}
-
+		LOG.info("Use is 'java WorkServer Classfile Name Slices'");
 		new WorkServer(args);
 	}
 }

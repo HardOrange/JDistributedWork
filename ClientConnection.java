@@ -1,6 +1,7 @@
 import java.net.*;
 import java.io.*;
 import java.util.logging.*;
+import org.apache.commons.io.FileUtils;
 
 public class ClientConnection extends Thread implements Serializable{
 	private Socket ClientSocket;
@@ -17,6 +18,9 @@ public class ClientConnection extends Thread implements Serializable{
 
 	public void run(){
 		try{
+			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
+			OOS.writeObject(HomeServer.getClassFileName());
+			FileUtils.copyFile(HomeServer.getClassFile(), ClientSocket.getOutputStream());
 			OIS = new ObjectInputStream(ClientSocket.getInputStream());
 			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
 			MaxWorkLoad = Integer.parseInt((String)OIS.readObject());

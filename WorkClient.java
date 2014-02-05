@@ -1,6 +1,7 @@
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import org.apache.commons.io.FileUtils;
 
 public class WorkClient implements Serializable{
 	private Socket connection;
@@ -17,6 +18,10 @@ public class WorkClient implements Serializable{
 		try{
 			connection = new Socket(address, port);
 			WorkLine = new ArrayList<ReportThread>();
+			OIS = new ObjectInputStream(connection.getInputStream());
+			File classFile = new File((String)(OIS.readObject()));
+			classFile.createNewFile();
+			FileUtils.copyInputStreamToFile(connection.getInputStream(), classFile);
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
 			MaxWorkLoad = Runtime.getRuntime().availableProcessors();
