@@ -18,9 +18,9 @@ public class WorkClient implements Serializable{
 		try{
 			connection = new Socket(address, port);
 			WorkLine = new ArrayList<ReportThread>();
-			OIS = new ObjectInputStream(connection.getInputStream());
+			//OIS = new ObjectInputStream(connection.getInputStream());
 			System.out.println("Made InputStream");
-			File classFile = new File((String)(OIS.readObject()));
+			File classFile = new File("RandomWork.class");//(String)(OIS.readObject()));
 			System.out.println("Got Name of File, and in Memory Made File");
 			//classFile.createNewFile();
 			System.out.println("Made new file on Local Storage");

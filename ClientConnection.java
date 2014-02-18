@@ -18,12 +18,13 @@ public class ClientConnection extends Thread implements Serializable{
 
 	public void run(){
 		try{
-			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
+			//OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
 			HomeServer.LOG.info("Made OutputStream");
-			OOS.writeObject(HomeServer.getClassFileName());
+			//OOS.writeObject(HomeServer.getClassFileName());
 			HomeServer.LOG.info("Wrote Out Name of ClassFile: "+HomeServer.getClassFileName());
 			//OOS.flush();
 			FileUtils.copyFile(HomeServer.getClassFile(), ClientSocket.getOutputStream());
+			ClientSocket.getOutputStream().write(-1);
 			HomeServer.LOG.info("Copied File to Other System");
 			OIS = new ObjectInputStream(ClientSocket.getInputStream());
 			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
