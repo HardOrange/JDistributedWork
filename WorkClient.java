@@ -19,9 +19,13 @@ public class WorkClient implements Serializable{
 			connection = new Socket(address, port);
 			WorkLine = new ArrayList<ReportThread>();
 			OIS = new ObjectInputStream(connection.getInputStream());
+			System.out.println("Made InputStream");
 			File classFile = new File((String)(OIS.readObject()));
-			classFile.createNewFile();
+			System.out.println("Got Name of File, and in Memory Made File");
+			//classFile.createNewFile();
+			System.out.println("Made new file on Local Storage");
 			FileUtils.copyInputStreamToFile(connection.getInputStream(), classFile);
+			System.out.println("Successful Copy of ClassFile");
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
 			MaxWorkLoad = Runtime.getRuntime().availableProcessors();
