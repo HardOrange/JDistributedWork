@@ -107,14 +107,16 @@ class WorkServerConnectionThread extends Thread{
 	public void run(){
 		try{
 			ServerSocket servSocket = new ServerSocket(3308);
+			ServerSocket servFTPSocket = new ServerSocket(3309);
 			int currentSessionCount = 0;
 			servSocket.setSoTimeout(200);
 			while(StillAcceptingConnections){
 				try{
 					Socket currSocket = servSocket.accept();
+					Socket currFTPSocket = servFTPSocket.accept();
 					Superior.LOG.info("Connection Negotiating");
 					currentSessionCount++;
-					ClientConnection currConn = new ClientConnection(currSocket, currentSessionCount, Superior);
+					ClientConnection currConn = new ClientConnection(currSocket, currFTPSocket, currentSessionCount, Superior);
 					Superior.newConnection(currConn);
 					currConn.start();
 				}catch(SocketTimeoutException e){

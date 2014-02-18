@@ -4,7 +4,7 @@ import java.util.*;
 import org.apache.commons.io.FileUtils;
 
 public class WorkClient implements Serializable{
-	private Socket connection;
+	private Socket connection, FileTransferSocket;
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;
 	private Integer	CurrentWorkLoad = 0;
@@ -17,15 +17,13 @@ public class WorkClient implements Serializable{
 	public WorkClient(String address, int port){
 		try{
 			connection = new Socket(address, port);
+			FileTransferSocket = new Socket(address, port+1);
 			WorkLine = new ArrayList<ReportThread>();
-			//OIS = new ObjectInputStream(connection.getInputStream());
-			System.out.println("Made InputStream");
-			File classFile = new File("RandomWork.class");//(String)(OIS.readObject()));
-			System.out.println("Got Name of File, and in Memory Made File");
-			//classFile.createNewFile();
-			System.out.println("Made new file on Local Storage");
-			FileUtils.copyInputStreamToFile(connection.getInputStream(), classFile);
-			System.out.println("Successful Copy of ClassFile");
+			
+			InputStream FileTransferInputStream = new ObjectInputStream(FileTransferSocket.getInputStream());
+			File classFile = new File((String)(((ObjectInputStream)FileTransferInputStream).readObject()));
+			FileUtils.copyInputStreamToFile(FileTransferInputStream, classFile);
+			FileTransferSocket.close();
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
 			MaxWorkLoad = Runtime.getRuntime().availableProcessors();

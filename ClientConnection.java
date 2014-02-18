@@ -5,27 +5,28 @@ import org.apache.commons.io.FileUtils;
 
 public class ClientConnection extends Thread implements Serializable{
 	private Socket ClientSocket;
+	private Socket ClientFTPSocket;
 	private ObjectInputStream OIS;
 	private ObjectOutputStream OOS;
 	private WorkServer HomeServer;
 	private Integer CurrentWorkLoad = 0;
 	private Integer MaxWorkLoad;
 
-	public ClientConnection(Socket clientSocket, int connectionNumber, WorkServer workServer){
+	public ClientConnection(Socket clientSocket, Socket clientFTPSocket, int connectionNumber, WorkServer workServer){
 		HomeServer = workServer;
 		ClientSocket = clientSocket;
+		ClientFTPSocket = clientFTPSocket;
 		}
 
 	public void run(){
 		try{
-			//OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
+			OutputStream ClientFTPOutputStream = new ObjectOutputStream(ClientFTPSocket.getOutputStream());
 			HomeServer.LOG.info("Made OutputStream");
-			//OOS.writeObject(HomeServer.getClassFileName());
+			((ObjectOutputStream)ClientFTPOutputStream).writeObject(HomeServer.getClassFileName());
 			HomeServer.LOG.info("Wrote Out Name of ClassFile: "+HomeServer.getClassFileName());
-			//OOS.flush();
-			FileUtils.copyFile(HomeServer.getClassFile(), ClientSocket.getOutputStream());
-			ClientSocket.getOutputStream().write(-1);
-			HomeServer.LOG.info("Copied File to Other System");
+			FileUtils.copyFile(HomeServer.getClassFile(), ClientFTPOutputStream);
+			ClientFTPOutputStream.flush();
+			ClientFTPSocket.close();
 			OIS = new ObjectInputStream(ClientSocket.getInputStream());
 			OOS = new ObjectOutputStream(ClientSocket.getOutputStream());
 			MaxWorkLoad = Integer.parseInt((String)OIS.readObject());
