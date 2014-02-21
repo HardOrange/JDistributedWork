@@ -24,10 +24,12 @@ public class WorkClient implements Serializable{
 			File classFile = new File((String)(((ObjectInputStream)FileTransferInputStream).readObject()));
 			FileUtils.copyInputStreamToFile(FileTransferInputStream, classFile);
 			FileTransferSocket.close();
+			System.out.println("File Transfer Closed");
 			OOS = new ObjectOutputStream(connection.getOutputStream());
 			OIS = new ObjectInputStream(connection.getInputStream());
 			MaxWorkLoad = Runtime.getRuntime().availableProcessors();
 			OOS.writeObject(Integer.toString(MaxWorkLoad));
+			System.out.println("Wrote out Max Processors: "+MaxWorkLoad);
 			ReportThread lastThreadReceived = (ReportThread) OIS.readObject();
 			while((lastThreadReceived!=null)||(CurrentWorkLoad>0)){
 				while((CurrentWorkLoad<MaxWorkLoad-1) && (lastThreadReceived!=null)){

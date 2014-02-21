@@ -36,7 +36,7 @@ public class ClientConnection extends Thread implements Serializable{
 			ReportThread lastWorkReceived = HomeServer.getWork();
 			while(lastWorkReceived instanceof ReportThread){
 				//HomeServer.LOG.info(OIS.readObject().getClass().getName());
-				//HomeServer.reportThread((ReportThread)OIS.readObject());
+				HomeServer.reportThread((ReportThread)OIS.readObject());
 				CurrentWorkLoad--;
 				lastWorkReceived = HomeServer.getWork();
 				OOS.writeObject(lastWorkReceived);
@@ -47,6 +47,7 @@ public class ClientConnection extends Thread implements Serializable{
 				CurrentWorkLoad--;
 			}
 		}catch(SocketException e){
+			terminateConnection();
 			HomeServer.removeConnection(this);
 			HomeServer.LOG.info("Client Disconnected and Removed");
 		}catch(Exception e){
